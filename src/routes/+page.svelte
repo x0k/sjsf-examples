@@ -5,4 +5,5 @@
 <ul>
   <li><a href="{base}/custom-form">Custom form</a></li>
   <li><a href="{base}/my-simple-form/">My simple form</a></li>
+  <li><a href="{base}/custom-validator">Custom validator</a></li>
 </ul>

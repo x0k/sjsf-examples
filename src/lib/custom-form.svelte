@@ -1,5 +1,6 @@
-<script lang="ts" generics="T">
+<script lang="ts" generics="T, E">
   import {
+    type FormValidator2,
     type Schema,
     type UiSchemaRoot,
     FormContent,
@@ -11,17 +12,19 @@
   interface Props {
     schema: Schema;
     uiSchema?: UiSchemaRoot;
+    validator?: FormValidator2<E>;
     initialValue?: T;
     onSubmit?: (value: T | undefined) => void;
   }
 
-  const { schema, uiSchema, initialValue, onSubmit }: Props = $props();
+  const { schema, uiSchema, initialValue, validator, onSubmit }: Props = $props();
 
   const form = useCustomForm({
     schema,
     uiSchema,
     initialValue,
     onSubmit,
+    validator,
   });
 </script>
 
