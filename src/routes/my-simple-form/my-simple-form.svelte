@@ -1,16 +1,17 @@
-<script lang="ts" generics="T, E">
-  import { FormContent, type FormAPI } from '@sjsf/form';
+<script lang="ts">
   import type { HTMLFormAttributes } from "svelte/elements";
+  import { Content, setFromContext, type FormInternals } from '@sjsf/form';
 
   interface Props extends HTMLFormAttributes {
     formElement?: HTMLFormElement;
-    form: FormAPI<T, E>;
+    form: FormInternals;
   }
 
   let { formElement = $bindable(), form, ...rest }: Props = $props();
+
+  setFromContext(form.context)
 </script>
 
 <form bind:this={formElement} use:form.enhance {...rest}>
-  <!-- svelte-ignore ownership_invalid_binding -->
-  <FormContent bind:value={form.formValue} />
+  <Content {form} />
 </form>

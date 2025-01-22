@@ -1,7 +1,12 @@
 <script lang="ts">
-  import { type Schema, type UiSchemaRoot, SimpleForm } from "@sjsf/form";
+  import {
+    type Schema,
+    type UiSchemaRoot,
+    RawForm,
+    SimpleForm,
+  } from "@sjsf/form";
 
-  import { useCustomForm } from "$lib/custom-form";
+  import { createCustomForm } from "$lib/custom-form";
 
   import {
     createTabsContext,
@@ -57,7 +62,7 @@
   const tabsCtx = createTabsContext(0);
   setTabsContext(tabsCtx);
 
-  const form = useCustomForm({
+  const form = createCustomForm({
     schema,
     uiSchema,
     onSubmit: console.log,
@@ -65,8 +70,4 @@
   });
 </script>
 
-<SimpleForm
-  {form}
-  novalidate
-  style="display: flex; flex-direction: column; gap: 1rem;"
-/>
+<RawForm {form} novalidate />

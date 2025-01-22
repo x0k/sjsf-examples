@@ -3,7 +3,7 @@
     DEFAULT_ID_PREFIX,
     DEFAULT_ID_SEPARATOR,
     pathToId,
-    SimpleForm,
+    RawForm,
     type FormValidator2,
     type Schema,
     type SchemaValue,
@@ -13,7 +13,7 @@
   import { createValidator2, Validator } from "@sjsf/ajv8-validator";
   import type { ErrorObject } from "ajv";
 
-  import { useCustomForm } from "$lib/custom-form";
+  import { createCustomForm } from "$lib/custom-form";
 
   const schema: Schema = {
     title: "Custom validation",
@@ -108,7 +108,7 @@
 
   const validator = createCustomValidator(createValidator2());
 
-  const form = useCustomForm({
+  const form = createCustomForm({
     schema,
     uiSchema,
     validator,
@@ -116,4 +116,4 @@
   });
 </script>
 
-<SimpleForm {form} novalidate />
+<RawForm {form} novalidate />
