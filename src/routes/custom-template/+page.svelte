@@ -1,13 +1,9 @@
 <script lang="ts">
-  import {
-    RawForm,
-    type Schema,
-    type Template,
-    type Templates,
-    templates as defaultTemplates,
-  } from "@sjsf/form";
+  import { overrideByRecord } from "@sjsf/form/lib/resolver";
+  import { BasicForm, type Schema } from "@sjsf/form";
 
-  import { createCustomForm } from "$lib/custom-form";
+  import { theme } from "$lib/theme";
+  import { createMyForm } from "$lib/my-form";
 
   import CustomFieldTemplate from "./custom-field-template.svelte";
 
@@ -52,19 +48,15 @@
     multipleChoicesList: ["foo", "bar", "fuzz"],
   };
 
-  const templates: Templates = (type, config) => {
-    if (type === "field") {
-      return CustomFieldTemplate as Template<typeof type>;
-    }
-    return defaultTemplates(type, config);
-  };
-
-  const form = createCustomForm({
+  const form = createMyForm({
     schema,
     initialValue,
-    templates,
+    // @ts-expect-error TODO: Fix in next.1
+    theme: overrideByRecord(theme, {
+      fieldTemplate: CustomFieldTemplate,
+    }),
     onSubmit: console.log,
   });
 </script>
 
-<RawForm {form} novalidate />
+<BasicForm {form} novalidate />

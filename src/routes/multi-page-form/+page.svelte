@@ -2,11 +2,11 @@
   import {
     type Schema,
     type UiSchemaRoot,
-    RawForm,
-    SimpleForm,
+    BasicForm,
   } from "@sjsf/form";
+  import type { ErrorObject } from 'ajv';
 
-  import { createCustomForm } from "$lib/custom-form";
+  import { createMyForm } from "$lib/my-form";
 
   import {
     createTabsContext,
@@ -62,12 +62,12 @@
   const tabsCtx = createTabsContext(0);
   setTabsContext(tabsCtx);
 
-  const form = createCustomForm({
+  const form = createMyForm({
     schema,
     uiSchema,
     onSubmit: console.log,
-    onSubmitError: makeTabbedFocusOnFirstError(tabsCtx),
+    onSubmitError: makeTabbedFocusOnFirstError<ErrorObject>(tabsCtx),
   });
 </script>
 
-<RawForm {form} novalidate />
+<BasicForm {form} novalidate />

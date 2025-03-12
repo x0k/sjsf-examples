@@ -1,19 +1,18 @@
 <script lang="ts">
   import {
-    DEFAULT_ID_PREFIX,
-    DEFAULT_ID_SEPARATOR,
     pathToId,
-    RawForm,
-    type FormValidator2,
+    BasicForm,
     type Schema,
     type SchemaValue,
     type UiSchemaRoot,
     type ValidationError,
+    type FormValueValidatorError,
+    type FormValueValidator,
   } from "@sjsf/form";
-  import { createValidator2, Validator } from "@sjsf/ajv8-validator";
+  import { createFormValidator } from "@sjsf/ajv8-validator";
   import type { ErrorObject } from "ajv";
 
-  import { createCustomForm } from "$lib/custom-form";
+  import { createMyForm } from "$lib/my-form";
 
   const schema: Schema = {
     title: "Custom validation",
@@ -39,8 +38,8 @@
     },
   };
   const uiSchema: UiSchemaRoot = {
-    pass1: { "ui:options": { input: { type: "password" } } },
-    pass2: { "ui:options": { input: { type: "password" } } },
+    pass1: { "ui:options": { text: { type: "password" } } },
+    pass2: { "ui:options": { text: { type: "password" } } },
   };
 
   class CustomError {}
@@ -55,9 +54,7 @@
     if (pass1 !== pass2) {
       return [
         {
-          instanceId: pathToId(DEFAULT_ID_PREFIX, DEFAULT_ID_SEPARATOR, [
-            "pass2",
-          ]),
+          instanceId: pathToId(["pass2"]),
           propertyTitle: "Repeat password",
           message: "Passwords don't match.",
           error: new CustomError(),
@@ -83,32 +80,23 @@
     });
   }
 
-  function createCustomValidator(
-    validator: Validator
-  ): FormValidator2<ErrorObject | CustomError> {
+  function createCustomValidator<V extends FormValueValidator<ErrorObject>>(
+    v: V
+  ) {
     return {
-      isValid(schema, rootSchema, formData) {
-        return validator.isValid(schema, rootSchema, formData);
+      ...v,
+      validateFormValue(rootSchema, formValue) {
+        const errors: ValidationError<
+          FormValueValidatorError<V> | CustomError
+        >[] = transformErrors(v.validateFormValue(rootSchema, formValue));
+        return errors.concat(customValidate(formValue));
       },
-      reset() {
-        validator.reset();
-      },
-      validateFieldData(field, fieldData) {
-        // You can also customize this method to transform/add custom errors
-        // during individual fields validation
-        return validator.validateFieldData(field, fieldData);
-      },
-      validateFormData(rootSchema, formData) {
-        const errors: ValidationError<ErrorObject | CustomError>[] =
-          transformErrors(validator.validateFormData(rootSchema, formData));
-        return errors.concat(customValidate(formData));
-      },
-    };
+    } satisfies FormValueValidator<FormValueValidatorError<V> | CustomError>;
   }
 
-  const validator = createCustomValidator(createValidator2());
+  const validator = createCustomValidator(createFormValidator());
 
-  const form = createCustomForm({
+  const form = createMyForm({
     schema,
     uiSchema,
     validator,
@@ -116,4 +104,4 @@
   });
 </script>
 
-<RawForm {form} novalidate />
+<BasicForm {form} novalidate />

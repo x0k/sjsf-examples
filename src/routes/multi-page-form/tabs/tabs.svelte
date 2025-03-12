@@ -4,7 +4,7 @@
 
   import { getTabsContext } from "./context.svelte";
 
-  const { config, children }: ComponentProps<"layout"> = $props();
+  const { config, children }: ComponentProps["layout"] = $props();
 
   const tabsCtx = getTabsContext()
 

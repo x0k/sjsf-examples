@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Schema, UiSchemaRoot } from "@sjsf/form";
 
-  import { createCustomForm } from "$lib/custom-form";
+  import { createMyForm } from "$lib/my-form";
 
   import MySimpleForm from "./my-simple-form.svelte";
 
@@ -20,24 +20,22 @@
   const uiSchema: UiSchemaRoot = {
     "ui:globalOptions": {
       hideTitle: true,
-      input: {
+      text: {
         spellcheck: false,
         autocomplete: "off",
       },
-    },
-    submitButton: {
-      "ui:options": {
-        input: {
-          disabled: true,
-        },
-      },
+      submitButton: {
+        disabled: true
+      }
     },
     content: {
-      "ui:widget": "textarea",
+      "ui:components": {
+        'textWidget': "textareaWidget"
+      }
     },
   };
 
-  const form = createCustomForm({
+  const form = createMyForm({
     schema,
     uiSchema,
     onSubmit: console.log,

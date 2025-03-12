@@ -2,7 +2,7 @@ import { SvelteMap } from "svelte/reactivity";
 import {
   DEFAULT_ID_PREFIX,
   DEFAULT_ID_SEPARATOR,
-  type Errors,
+  type FieldErrorsMap,
 } from "@sjsf/form";
 import { focusOnFirstError } from "@sjsf/form/focus-on-first-error";
 
@@ -13,7 +13,7 @@ interface Options {
   idSeparator?: string;
 }
 
-export function makeTabbedFocusOnFirstError(
+export function makeTabbedFocusOnFirstError<E>(
   ctx: TabsContext,
   {
     idPrefix = DEFAULT_ID_PREFIX,
@@ -21,7 +21,7 @@ export function makeTabbedFocusOnFirstError(
   }: Options = {}
 ) {
   const l = idPrefix.length + 1;
-  return (errors: Errors, e: SubmitEvent) => {
+  return (errors: FieldErrorsMap<E>, e: SubmitEvent) => {
     if (errors.size === 0) {
       return;
     }

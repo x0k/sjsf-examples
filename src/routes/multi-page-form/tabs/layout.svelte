@@ -5,24 +5,12 @@
     type ComponentProps,
   } from "@sjsf/form";
 
-  import Tabs from './tabs.svelte';
-  import Tab from './tab.svelte';
+  import Tabs from "./tabs.svelte";
+  import Tab from "./tab.svelte";
 
-  const props: ComponentProps<"layout"> =
-    $props();
+  const props: ComponentProps["layout"] = $props();
 
   const ctx = getFormContext();
-
-  // Default layout
-  const Layout = $derived(
-    getComponent(ctx, "layout", {
-      ...props.config,
-      uiSchema: {
-        ...props.config.uiSchema,
-        "ui:components": undefined,
-      },
-    })
-  );
 </script>
 
 {#if props.type === "array-items"}
@@ -30,5 +18,12 @@
 {:else if props.type === "array-item"}
   <Tab {...props} />
 {:else}
+  {@const Layout = getComponent(ctx, "layout", {
+    ...props.config,
+    uiSchema: {
+      ...props.config.uiSchema,
+      "ui:components": undefined,
+    },
+  })}
   <Layout {...props} />
 {/if}
