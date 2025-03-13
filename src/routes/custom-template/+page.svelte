@@ -51,7 +51,6 @@
   const form = createMyForm({
     schema,
     initialValue,
-    // @ts-expect-error TODO: Fix in next.1
     theme: overrideByRecord(theme, {
       fieldTemplate: CustomFieldTemplate,
     }),
