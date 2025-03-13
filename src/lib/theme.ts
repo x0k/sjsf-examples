@@ -1,7 +1,3 @@
-import { theme as basic } from "@sjsf/basic-theme";
-import { extendByRecord } from "@sjsf/form/lib/resolver";
-import TextareaWidget from "@sjsf/basic-theme/extra-widgets/textarea.svelte";
+import "@sjsf/basic-theme/extra-widgets/textarea-include";
 
-export const theme = extendByRecord(basic, {
-  textareaWidget: TextareaWidget,
-});
+export { theme } from "@sjsf/basic-theme";
