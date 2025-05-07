@@ -11,6 +11,7 @@
     config,
     showTitle,
     errors,
+    uiOption,
   }: ComponentProps["fieldTemplate"] = $props();
 
   const ctx = getFormContext();
@@ -21,7 +22,11 @@
   const ErrorsList = $derived(getComponent(ctx, "errorsList", config));
   const Help = $derived(getComponent(ctx, "help", config));
 
-  const { showMeta, description, title } = $derived(getTemplateProps(config));
+  const { showMeta, description, title } = $derived(
+    getTemplateProps(uiOption, config)
+  );
+
+  const help = $derived(uiOption("help"));
 </script>
 
 <!-- NOTE: To keep the example simple, I apply the necessary styles here.
@@ -33,20 +38,13 @@ of the `field-meta` layout. -->
     <Layout type="field-meta" {config} {errors}>
       <div style="display: flex; justify-content: space-between;">
         {#if showTitle && title}
-          <Title
-            type="field"
-            {title}
-            required={config.required}
-            forId={config.id}
-            {config}
-            {errors}
-          />
+          <Title type="field" {title} {config} {errors} />
         {/if}
         {#if description}
           <Description type="field" {description} {config} {errors} />
         {/if}
         {#if errors.length > 0}
-          <ErrorsList forId={config.id} {errors} {config} />
+          <ErrorsList {errors} {config} />
         {/if}
       </div>
     </Layout>
@@ -54,7 +52,7 @@ of the `field-meta` layout. -->
   <Layout type="field-content" {config} {errors}>
     {@render children()}
   </Layout>
-  {#if config.uiOptions?.help !== undefined}
-    <Help help={config.uiOptions.help} {config} {errors} />
+  {#if help !== undefined}
+    <Help {help} {config} {errors} />
   {/if}
 </Layout>
